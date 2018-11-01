@@ -187,10 +187,34 @@ Disc_Z2_Real=disc_z2(Z_2)
 Disc_Z2_Fake=disc_z2(Enc_Z2,reuse=True)
 
 
-Disc_X_Loss=tf.reduce_mean(tf.log(Disc_X_Real)+tf.log(1.-Disc_X_Fake))
-Disc_Y_Loss=tf.reduce_mean(tf.log(Disc_Y_Real)+tf.log(1.-Disc_Y_Fake))
-Disc_Z1_Loss=tf.reduce_mean(tf.log(Disc_Z1_Real)+tf.log(1.-Disc_Z1_Fake))
-Disc_Z2_Loss=tf.reduce_mean(tf.log(Disc_Z2_Real)+tf.log(1.-Disc_Z2_Fake))
+Disc_X_Loss=-tf.reduce_mean(tf.log(Disc_X_Real)+tf.log(1.-Disc_X_Fake))
+Disc_Y_Loss=-tf.reduce_mean(tf.log(Disc_Y_Real)+tf.log(1.-Disc_Y_Fake))
+Disc_Z1_Loss=-tf.reduce_mean(tf.log(Disc_Z1_Real)+tf.log(1.-Disc_Z1_Fake))
+Disc_Z2_Loss=-tf.reduce_mean(tf.log(Disc_Z2_Real)+tf.log(1.-Disc_Z2_Fake))
+
+Gen_X_Loss=-tf.reduce_mean(tf.log(Disc_X_Fake))
+Gen_Y_Loss=-tf.reduce_mean(tf.log(Disc_Y_Fake))
+Gen_Z1_Loss=-tf.reduce_mean(tf.log(Disc_Z1_Fake))
+Gen_Z2_Loss=-tf.reduce_mean(tf.log(Disc_Z2_Fake))
+
+Cyc_X_Loss=tf.losses.absolute_difference(Recon_X,X)
+Cyc_Y_Loss=tf.losses.absolute_difference(Recon_Y,Y)
+Cyc_Z1_Loss=tf.losses.absolute_difference(Recon_Z1,Z_1)
+Cyc_Z2_Loss=tf.losses.absolute_difference(Recon_Z2,Z_2)
+
+D_Loss= Disc_X_Loss+Disc_Y_Loss+Disc_Z1_Loss+Disc_Z2_Loss
+
+Gen_Loss= Gen_X_Loss + Gen_Y_Loss + Gen_Z1_Loss + Gen_Z2_Loss
+
+Cyc_Loss= Cyc_X_Loss + Cyc_Y_Loss + Cyc_Z1_Loss + Cyc_Z2_Loss
+
+Total_G_Loss= Gen_Loss + Cyc_Loss
+
+T_vars=tf.trainable_variables()
+
+
+
+
 
 
 
